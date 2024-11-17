@@ -18,9 +18,9 @@ connection = oracledb.connect(user=user, password=password, dsn=dsn)
 # Crea un cursor para ejecutar la consulta
 cursor = connection.cursor()
 
+
 class direccion:
 
-    # Para crear una dirección
     @staticmethod
     def insertarDireccion(id_afiliado, id_ciudad, direccion, descripcion):
         try:
@@ -30,10 +30,10 @@ class direccion:
             """
 
             valores = {
-            'id_afiliado': id_afiliado,
-            'id_ciudad': id_ciudad,
-            'direccion': direccion,
-            'descripcion': descripcion
+                'id_afiliado': id_afiliado,
+                'id_ciudad': id_ciudad,
+                'direccion': direccion,
+                'descripcion': descripcion
             }
 
             # Ejecuta la consulta de inserción con los valores proporcionados
@@ -88,11 +88,10 @@ class direccion:
             if connection:
                 connection.close()
 
-
     @staticmethod
     def buscarDireccion(id_direccion):
         try:
-            
+
             # Consulta para obtener los datos de la tabla direcciones
             sql = """SELECT id_afiliado, id_ciudad, direccion, descripcion 
             FROM direccion
@@ -114,16 +113,5 @@ class direccion:
             if connection:
                 connection.close()
 
-
-
-    # Llamada a la función para insertar un nuevo afiliados
-    # crearAfiliado(1, 1, 'Pablo', 'Alborán', 'dasdfgasdfsa@example.com', '1234567890', 1)
-    # eliminarAfiliado(64)
-
-    # actualizarAfiliado(1, "juanpereza@gmail.com", 3199494949)
-
     # mostrarDirecciones()
 
-# Cierra el cursor y la conexión
-cursor.close()
-connection.close()

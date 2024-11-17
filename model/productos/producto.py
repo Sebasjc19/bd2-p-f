@@ -14,15 +14,17 @@ connection = oracledb.connect(user=user, password=password, dsn=dsn)
 cursor = connection.cursor()
 
 class producto:
+
+
     @staticmethod
-    def buscarDespacho(id_despacho):
+    def buscarProducto(id_producto):
         try:
             sql = """
-                SELECT id_despacho, id_factura_venta, id_direccion, id_transportadora, fecha_salida, hora_salida, guia
-                FROM Despacho
-                WHERE id_despacho = :1
+                SELECT *
+                FROM vista_productos
+                WHERE id_producto = :1
             """
-            valores = (id_despacho,)
+            valores = (id_producto,)
             cursor.execute(sql, valores)
 
             # Obtener el resultado de la consulta
@@ -32,7 +34,7 @@ class producto:
                 print("Registro encontrado:", registro)
                 return registro
             else:
-                print("No se encontró un registro con id_despacho =", id_despacho)
+                print("No se encontró un registro con id_producto =", id_producto)
                 return None
 
         finally:
@@ -42,5 +44,29 @@ class producto:
             if connection:
                 connection.close()
 
+    @staticmethod
+    def obtenerProductos():
+        try:
+            sql = """
+                    SELECT *
+                    FROM vista_productos
+                """
+            cursor.execute(sql)
 
+            # Obtener el resultado de la consulta
+            registro = cursor.fetchall()
+
+            if registro:
+                print("Productos encontrados:", registro)
+                return registro
+            else:
+                print("No se encontró productos")
+                return None
+
+        finally:
+            # Cerrar recursos
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
 

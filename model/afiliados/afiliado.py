@@ -22,11 +22,16 @@ cursor = connection.cursor()
 class afiliado:
 
     @staticmethod
-    def crearAfiliado(id_rango, id_promotor, nombre, apellido, email, telefono, activo):
+    def crearAfiliado(id_rango, id_promotor, nombre, apellido, email, telefono):
         try:
+
+            # Variable para almacenar el ID generado
+            afiliado_id = cursor.var(int)
+
             query = """
             INSERT INTO afiliado (id_rango, id_promotor, nombre, apellido, email, fecha_afiliacion, telefono, activo)
             VALUES (:id_rango, :id_promotor, :nombre, :apellido, :email, SYSDATE, :telefono, :activo)
+            RETURNING id_afiliado INTO :afiliado_id
             """
 
             valores = {
@@ -36,11 +41,17 @@ class afiliado:
                 'apellido': apellido,
                 'email': email,
                 'telefono': telefono,
-                'activo': activo
+                'activo': 1,
+                'afiliado_id': afiliado_id  # Vinculamos la variable al parámetro RETURNING
             }
 
             # Ejecuta la consulta de inserción con los valores proporcionados
             cursor.execute(query, valores)
+
+            # Obtener el ID del afiliado insertado
+            afiliado_id_value = afiliado_id.getvalue()
+
+            cursor.callproc("crear_usuario_afiliado", [afiliado_id_value])
 
             # Realiza el commit para guardar los cambios
             connection.commit()
@@ -157,6 +168,6 @@ class afiliado:
             if connection:
                 connection.close()
 
+    # buscarAfiliado(4)
+    crearAfiliado(1, 1, "Luisa", "Valencia", "luisa@gmail.com", 3234345654)
     # mostrarAfiliados()
-    buscarAfiliado(4)
-

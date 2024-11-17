@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from model.afiliados.afiliado import afiliado
+from views import inicio_afiliado
+
 
 class LoginWindow(tk.Tk):
     def __init__(self):
@@ -25,7 +27,7 @@ class LoginWindow(tk.Tk):
         self.password_label = ttk.Label(main_frame, text="Contraseña:", font=("Arial", 12))
         self.username_entry = ttk.Entry(main_frame, font=("Arial", 12))
         self.password_entry = ttk.Entry(main_frame, show="*", font=("Arial", 12))
-        self.login_button = ttk.Button(main_frame, text="Iniciar sesión", command=self.login)
+        self.login_button = ttk.Button(main_frame, text="Iniciar sesión", command=self.abrir_inicio_afiliado)
 
         self.username_label.grid(row=1, column=0, padx=10, pady=10, sticky="e")
         self.password_label.grid(row=2, column=0, padx=10, pady=10, sticky="e")
@@ -38,22 +40,12 @@ class LoginWindow(tk.Tk):
     def login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
-        nivel_usuario = afiliado.verificar_rango(id_rango)
-        if not id_rango or not password:
-            messagebox.showinfo("Alerta", "Por favor, ingrese el nombre de usuario y la contraseña")
-            return
 
-        if afilaido.verificar_login(username, password, id_rango):
-            messagebox.showinfo("Acceso Correcto", "¡Bienvenido de nuevo!)
-            self.destroy()
-            root = tk.Tk()
-            root.title("Nexus")
-            Nexus(root, id_rango)
-            root.mainloop()
-        else:
-            messagebox.showinfo("Acceso Denegado", "Nombre de usuario o contraseña incorrectos")
+    def abrir_inicio_afiliado(self):
+        ventana_inicio = inicio_afiliado.VentanAfiliado(self.root)
+
 
 
 if __name__ == "__main__":
-    login_window = LoginWindow()
-    login_window.mainloop()
+   login_window = LoginWindow()
+login_window.mainloop()
