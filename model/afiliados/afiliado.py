@@ -49,8 +49,7 @@ class afiliado:
             cursor.execute(query, valores)
 
             # Obtener el ID del afiliado insertado
-            afiliado_id_value = afiliado_id.getvalue()
-
+            afiliado_id_value = int(afiliado_id.getvalue()[0])  # Convertir explícitamente a entero
             cursor.callproc("crear_usuario_afiliado", [afiliado_id_value])
 
             # Realiza el commit para guardar los cambios
@@ -169,5 +168,5 @@ class afiliado:
                 connection.close()
 
     # buscarAfiliado(4)
-    crearAfiliado(1, 1, "Luisa", "Valencia", "luisa@gmail.com", 3234345654)
-    # mostrarAfiliados()
+    # crearAfiliado(1, 1, "Leonardo", "Valencia", "leonardo@gmail.com", 3234345654)
+    mostrarAfiliados()
