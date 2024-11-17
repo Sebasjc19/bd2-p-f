@@ -19,7 +19,7 @@ class VentanaVentas:
 
         # Establecer el ancho de las columnas
         self.tree.column("ID Factura", width=100, anchor="center")
-        self.tree.column("Nombre afiliado", width=200, anchor="center")
+        self.tree.column("Nombre afiliados", width=200, anchor="center")
         self.tree.column("Total", width=100, anchor="center")
 
         # Agregar algunos datos de ejemplo

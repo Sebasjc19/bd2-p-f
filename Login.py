@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from model.afiliados.afiliado import afiliado
 
 class LoginWindow(tk.Tk):
     def __init__(self):
@@ -37,17 +38,17 @@ class LoginWindow(tk.Tk):
     def login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
-        nivel_usuario = Usuario.obtener_nivel_acceso(username)
-        if not username or not password:
+        nivel_usuario = afiliado.verificar_rango(id_rango)
+        if not id_rango or not password:
             messagebox.showinfo("Alerta", "Por favor, ingrese el nombre de usuario y la contraseña")
             return
 
-        if Usuario.verificar_login(username, password, nivel_usuario):
-            messagebox.showinfo("Acceso Correcto", "¡Bienvenido de nuevo!, tu nivel de acceso es: " + nivel_usuario)
+        if afilaido.verificar_login(username, password, id_rango):
+            messagebox.showinfo("Acceso Correcto", "¡Bienvenido de nuevo!)
             self.destroy()
             root = tk.Tk()
-            root.title("BancoUQ")
-            BancoUQApp(root, nivel_usuario)
+            root.title("Nexus")
+            Nexus(root, id_rango)
             root.mainloop()
         else:
             messagebox.showinfo("Acceso Denegado", "Nombre de usuario o contraseña incorrectos")

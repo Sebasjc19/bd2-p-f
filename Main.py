@@ -21,7 +21,7 @@ connection = oracledb.connect(user=user, password=password, dsn=dsn)
 cursor = connection.cursor()
 
 # Ejecuta una consulta sencilla
-query = "SELECT id_afiliado, nombre FROM afiliado"
+query = "SELECT id_afiliado, nombre FROM afiliados"
 cursor.execute(query)
 
 # Itera sobre los resultados y muestra cada fila

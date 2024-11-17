@@ -1,6 +1,3 @@
-import datetime
-import time
-
 import oracledb
 
 # Configura los parámetros de conexión
@@ -21,9 +18,9 @@ connection = oracledb.connect(user=user, password=password, dsn=dsn)
 # Crea un cursor para ejecutar la consulta
 cursor = connection.cursor()
 
-#Para crear un afiliado
+#Para crear un afiliados
 query = """
-INSERT INTO afiliado (id_afiliado, id_rango, id_promotor, nombre, apellido, email, fecha_afiliacion, telefono, activo)
+INSERT INTO afiliados (id_afiliado, id_rango, id_promotor, nombre, apellido, email, fecha_afiliacion, telefono, activo)
 VALUES (:id_afiliado, :id_rango, :id_promotor, :nombre, :apellido, :email, SYSDATE, :telefono, :activo)
 """
 
@@ -45,7 +42,7 @@ cursor.execute(query, valores)
 
 # Ejecuta una consulta sencilla
 query = ("SELECT id_afiliado, id_rango, id_promotor, nombre, apellido, email, fecha_afiliacion, telefono, activo "
-         "FROM afiliado")
+         "FROM afiliados")
 cursor.execute(query)
 
 # Itera sobre los resultados y muestra cada fila
