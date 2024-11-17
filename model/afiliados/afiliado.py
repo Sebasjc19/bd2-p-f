@@ -141,6 +141,24 @@ class afiliado:
 
         return afiliados
 
+    @staticmethod
+    def mostrarVentasAfiliado(id_promotor):
+        query = """
+                select fv.id_factura_venta, sum(dv.precio_unitario*dv.cantidad)
+                from afiliado a
+                join factura_venta fv on a.id_afiliado = fv.id_afiliado
+                join detalle_venta dv on fv.id_factura_Venta = dv.id_factura_Venta
+                group by (fv.id_factura_venta)
+                   """
+        cursor.execute(query, {'id_promotor': id_promotor})
+
+        afiliados = []
+        for row in cursor:
+            # Solo seleccionamos las columnas necesarias para el Treeview
+            afiliados.append((row[0], row[1], row[6]))  # ID, Nombre y Rango
+
+        return afiliados
+
     # buscarAfiliado(4)
     # crearAfiliado(1, 1, "Leonardo", "Valencia", "leonardo@gmail.com", 3234345654)
     # mostrarAfiliados()
