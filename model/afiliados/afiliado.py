@@ -125,4 +125,38 @@ class afiliado:
             if connection:
                 connection.close()
 
+    @staticmethod
+    def buscarAfiliado(id_afiliado):
+        try:
+            sql = """
+                SELECT id_afiliado, id_rango, id_promotor, nombre, apellido, email, fecha_afiliacion, telefono, activo
+                FROM afiliado
+                WHERE id_afiliado = :1
+            """
+            valores = (id_afiliado,)
+            cursor.execute(sql, valores)
+
+            # Obtener el resultado de la consulta
+            registro = cursor.fetchone()
+
+            if registro:
+                print("Afiliado encontrado:", registro)
+                return registro
+            else:
+                print(f"No se encontró un afiliado con id_afiliado = {id_afiliado}")
+                return None
+
+        except Exception as e:
+            print(f"Error al buscar el afiliado: {e}")
+            return None
+
+        finally:
+            # Cerrar recursos
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+
+    # mostrarAfiliados()
+    buscarAfiliado(4)
 

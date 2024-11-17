@@ -39,6 +39,9 @@ class VentanaPrincipal:
     def ver_afiliados(self):
         print("Ver afiliados de mi red")
 
+    def ver_despachos(self):
+        print("Ver despachos")
+
 # Crear la ventana principal
 root = tk.Tk()
 app = VentanaPrincipal(root)

@@ -22,7 +22,7 @@ class direccion:
 
     # Para crear una dirección
     @staticmethod
-    def crearDireccion(id_afiliado, id_ciudad, direccion, descripcion):
+    def insertarDireccion(id_afiliado, id_ciudad, direccion, descripcion):
         try:
             sql = """
             INSERT INTO direcciones (id_afiliado, id_ciudad, direccion, descriptivo)
@@ -48,51 +48,72 @@ class direccion:
                 connection.close()
 
     @staticmethod
-    def eliminarDireccion(id_afiliado):
+    def borrarDireccion(id_afiliado):
         try:
-            query = "DELETE FROM afiliados WHERE id_afiliado = :id_afiliado"
-        valores = {
-            'id_afiliado': id_afiliado
-        }
+            sql = "DELETE FROM afiliados WHERE id_afiliado = :1"
+            valores = (id_afiliado,)
+            # Ejecuta la consulta de eliminación con los valores proporcionados
+            cursor.execute(sql, valores)
+            # Realiza el commit para guardar los cambios
+            connection.commit()
+            print(cursor.rowcount, "registro(s) eliminado(s) con éxito")
+        finally:
+            # Cerrar recursos
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
 
-        # Ejecuta la consulta de eliminación con los valores proporcionados
-        cursor.execute(query, valores)
-
-        # Realiza el commit para guardar los cambios
-        connection.commit()
-
-
-    def mostrarDirecciones():
-        # Consulta para obtener los datos de la tabla direcciones
-        query = "SELECT id_afiliado, id_ciudad, direccion, descripcion FROM direccion"
-        cursor.execute(query)
-
-        # Itera sobre los resultados y muestra cada fila
-        for row in cursor:
-            print("ID Afiliado:", row[0],
-                  "ID Ciudad:", row[1],
-                  "Dirección:", row[2],
-                  "Descriptivo:", row[3])
-
-
+    @staticmethod
     def actualizarDireccion(id_afiliado, email_nuevo, telefono_nuevo):
-        query = """
-        UPDATE afiliados
-        SET email = :email_nuevo, telefono = :telefono_nuevo
-        WHERE id_afiliado = :id_afiliado
-        """
+        try:
+            sql = """
+             UPDATE afiliados
+             SET email = :email_nuevo, telefono = :telefono_nuevo
+             WHERE id_afiliado = :id_afiliado
+             """
 
-        valores = {
-            'id_afiliado': id_afiliado,
-            'email_nuevo': email_nuevo,
-            'telefono_nuevo': telefono_nuevo
-        }
+            valores = (id_afiliado, email_nuevo, telefono_nuevo)
 
-        # Ejecuta la consulta de actualización con los valores proporcionados
-        cursor.execute(query, valores)
+            # Ejecuta la consulta de actualización con los valores proporcionados
+            cursor.execute(sql, valores)
 
-        # Realiza el commit para guardar los cambios
-        connection.commit()
+            # Realiza el commit para guardar los cambios
+            connection.commit()
+            print(cursor.rowcount, "registro(s) actualizado(s) con éxito")
+        finally:
+            # Cerrar recursos
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+
+
+    @staticmethod
+    def buscarDireccion(id_direccion):
+        try:
+            
+            # Consulta para obtener los datos de la tabla direcciones
+            sql = """SELECT id_afiliado, id_ciudad, direccion, descripcion 
+            FROM direccion
+            WHERE id_direccion = :1"""
+            valores = (id_direccion,)
+            cursor.execute(sql, valores)
+
+            despacho = cursor.fetchone()
+
+            if despacho:
+                print("Registro encontrado", despacho)
+                return despacho
+            else:
+                print("No se encontró un registro con id_afiliado =", id_direccion)
+                return None
+        finally:
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+
 
 
     # Llamada a la función para insertar un nuevo afiliados
@@ -101,7 +122,7 @@ class direccion:
 
     # actualizarAfiliado(1, "juanpereza@gmail.com", 3199494949)
 
-mostrarDirecciones()
+    # mostrarDirecciones()
 
 # Cierra el cursor y la conexión
 cursor.close()

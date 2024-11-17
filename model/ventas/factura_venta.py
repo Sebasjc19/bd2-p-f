@@ -56,7 +56,23 @@ class factura_venta:
             if connection:
                 connection.close()
 
-    
+    @staticmethod
+    def eliminarfactura_venta(id_factura_venta):
+        try:
+            sql = "DELETE FROM Factura_Venta WHERE id_factura_venta = :1"
+            valores = (id_factura_venta,)
+            cursor.execute(sql, valores)
+
+            # Confirmar los cambios
+            connection.commit()
+            print(cursor.rowcount, "registro(s) eliminado(s) con éxito")
+
+        finally:
+            # Cerrar recursos
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
 
     @staticmethod
     def buscarfactura_venta(id_factura_venta):

@@ -18,84 +18,116 @@ connection = oracledb.connect(user=user, password=password, dsn=dsn)
 # Crea un cursor para ejecutar la consulta
 cursor = connection.cursor()
 
+class departamento:
+    @staticmethod
+    def crearDepartamento(nombre):
+        try:
+            query = """
+                INSERT INTO departamento (nombre)
+                VALUES (:nombre)
+                """
 
-# Para crear un departamento
-def crearDepartamento(nombre):
-    query = """
-        INSERT INTO departamento (nombre)
-        VALUES (:nombre)
+            valores = {
+                'nombre': nombre
+            }
+
+            # Ejecuta la consulta de inserción con los valores proporcionados
+            cursor.execute(query, valores)
+
+            # Realiza el commit para guardar los cambios
+            connection.commit()
+
+            print(f"Departamento '{nombre}' creado exitosamente.")
+        finally:
+            # Cerrar recursos
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+
+    @staticmethod
+    def mostrarDepartamentos():
+        try:
+            # Consulta para obtener los datos de la tabla de departamentos
+            query = "SELECT ID_DEPARTAMENTO, NOMBRE FROM departamento"
+            cursor.execute(query)
+
+            # Itera sobre los resultados y muestra cada fila
+            for row in cursor:
+                print("ID Departamento:", row[0], "Nombre:", row[1])
+        finally:
+            # Cerrar recursos
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+
+    @staticmethod
+    def actualizarDepartamento(id_departamento, nombre_nuevo):
+        query = """
+        UPDATE departamento
+        SET nombre = :nombre_nuevo
+        WHERE id_departamento = :id_departamento
         """
 
-    valores = {
-        'nombre': nombre
-    }
+        valores = {
+            'id_departamento': id_departamento,
+            'nombre_nuevo': nombre_nuevo
+        }
 
-    # Ejecuta la consulta de inserción con los valores proporcionados
-    cursor.execute(query, valores)
+        # Ejecuta la consulta de actualización con los valores proporcionados
+        cursor.execute(query, valores)
 
-    # Realiza el commit para guardar los cambios
-    connection.commit()
+        # Realiza el commit para guardar los cambios
+        connection.commit()
 
-    print(f"Departamento '{nombre}' creado exitosamente.")
+        print(f"Departamento con ID {id_departamento} actualizado a '{nombre_nuevo}'.")
 
+    @staticmethod
+    def eliminarDepartamento(id_departamento):
+        # Consulta para eliminar un departamento por su ID
+        query = "DELETE FROM departamento WHERE ID_DEPARTAMENTO = :id"
 
-def mostrarDepartamentos():
-    # Consulta para obtener los datos de la tabla de departamentos
-    query = "SELECT ID_DEPARTAMENTO, NOMBRE FROM departamento"
-    cursor.execute(query)
+        # Ejecuta la consulta con el parámetro
+        cursor.execute(query, {"id": id_departamento})
 
-    # Itera sobre los resultados y muestra cada fila
-    for row in cursor:
-        print("ID Departamento:", row[0], "Nombre:", row[1])
+        # Confirma los cambios en la base de datos
+        connection.commit()
 
+        print(f"Departamento con ID {id_departamento} ha sido eliminado.")
 
-def actualizarDepartamento(id_departamento, nombre_nuevo):
-    query = """
-    UPDATE departamento
-    SET nombre = :nombre_nuevo
-    WHERE id_departamento = :id_departamento
-    """
+    @staticmethod
+    def buscarDepartamento(id_departamento):
+        try:
+            sql = """
+                SELECT id_departamento, nombre
+                FROM departamento
+                WHERE id_departamento = :1
+            """
+            valores = (id_departamento,)
+            cursor.execute(sql, valores)
 
-    valores = {
-        'id_departamento': id_departamento,
-        'nombre_nuevo': nombre_nuevo
-    }
+            # Obtener el resultado de la consulta
+            registro = cursor.fetchone()
 
-    # Ejecuta la consulta de actualización con los valores proporcionados
-    cursor.execute(query, valores)
+            if registro:
+                print("Registro encontrado:", registro)
+                return registro
+            else:
+                print(f"No se encontró un registro con id_departamento = {id_departamento}")
+                return None
 
-    # Realiza el commit para guardar los cambios
-    connection.commit()
+        except Exception as e:
+            print(f"Error al buscar el departamento: {e}")
+            return None
 
-    print(f"Departamento con ID {id_departamento} actualizado a '{nombre_nuevo}'.")
+        finally:
+            # Cerrar recursos
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
 
+    mostrarDepartamentos()
+    buscarDepartamento(3)
 
-def eliminarDepartamento(id_departamento):
-    # Consulta para eliminar un departamento por su ID
-    query = "DELETE FROM departamento WHERE ID_DEPARTAMENTO = :id"
-
-    # Ejecuta la consulta con el parámetro
-    cursor.execute(query, {"id": id_departamento})
-
-    # Confirma los cambios en la base de datos
-    connection.commit()
-
-    print(f"Departamento con ID {id_departamento} ha sido eliminado.")
-
-
-# Llamada a la función para insertar un nuevo afiliados
-# crearAfiliado(1, 1, 'Pablo', 'Alborán', 'dasdfgasdfsa@example.com', '1234567890', 1)
-# eliminarAfiliado(64)
-
-# actualizarAfiliado(1, "juanpereza@gmail.com", 3199494949)
-
-# eliminarDepartamento(11)
-# actualizarDepartamento(2,"Quindío")
-crearDepartamento("Sucre")
-
-# eliminarDepartamento(6)
-mostrarDepartamentos()
-
-# Cierra el cursor y la conexión
-cursor.close()
-connection.close()
