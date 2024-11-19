@@ -22,7 +22,21 @@ class VentanaProductos:
 
         # Crear el Treeview
         self.tree = ttk.Treeview(frame_principal, columns=("ID Producto", "Nombre Producto", "Cantidad", "Precio Venta", "Precio Compra"), show="headings")
-        self.tree.grid(row=1, column=0, columnspan=2, pady=20, sticky="nsew")  # Usar grid
+
+        # Configuración de las columnas
+        self.tree.heading("ID Producto", text="ID Producto")
+        self.tree.heading("Nombre Producto", text="Nombre Producto")
+        self.tree.heading("Cantidad", text="Cantidad")
+        self.tree.heading("Precio Venta", text="Precio Venta")
+        self.tree.heading("Precio Compra", text="Precio Compra")
+        self.tree.column("ID Producto", width=100, anchor="center")
+        self.tree.column("Nombre Producto", width=200, anchor="center")
+        self.tree.column("Cantidad", width=100, anchor="center")
+        self.tree.column("Precio Venta", width=100, anchor="center")
+        self.tree.column("Precio Compra", width=100, anchor="center")
+
+        # Colocar el Treeview en la ventana
+        self.tree.grid(row=1, column=0, columnspan=2, pady=20, sticky="nsew")
 
         # Botón para regresar a la vista de afiliados
         btn_volver = tk.Button(frame_principal, text="Volver a Afiliados", command=self.ventana_productos.destroy)

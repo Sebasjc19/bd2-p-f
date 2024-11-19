@@ -21,13 +21,13 @@ class afiliado:
 
 
     @staticmethod
-    def crearAfiliado(id_promotor, nombre, apellido, email, telefono):
+    def crearAfiliado(nombre, apellido, email, telefono, id_promotor):
         # Variable para almacenar el ID generado
         afiliado_id = cursor.var(int)
 
         query = """
-        INSERT INTO afiliado (id_rango, id_promotor, nombre, apellido, email, fecha_afiliacion, telefono, activo)
-        VALUES (:id_rango, :id_promotor, :nombre, :apellido, :email, SYSDATE, :telefono, :activo)
+        INSERT INTO afiliado (id_rango,id_promotor, nombre, apellido, email, fecha_afiliacion, telefono, activo)
+        VALUES (:id_rango, :id_promotor,:nombre, :apellido, :email, SYSDATE, :telefono, :activo)
         RETURNING id_afiliado INTO :afiliado_id
         """
 
@@ -39,17 +39,12 @@ class afiliado:
             'email': email,
             'telefono': telefono,
             'activo': 1,
-            'afiliado_id': afiliado_id  # Vinculamos la variable al parámetro RETURNING
+            'afiliado_id': afiliado_id
+
         }
 
-        # Ejecuta la consulta de inserción con los valores proporcionados
         cursor.execute(query, valores)
 
-        # Obtener el ID del afiliado insertado
-        afiliado_id_value = int(afiliado_id.getvalue()[0])  # Convertir explícitamente a entero
-        cursor.callproc("crear_usuario_afiliado", [afiliado_id_value])
-
-        # Realiza el commit para guardar los cambios
         connection.commit()
 
     @staticmethod

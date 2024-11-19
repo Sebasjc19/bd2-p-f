@@ -1,8 +1,19 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from model.afiliados.afiliado import afiliado
-from views import inicio_afiliado
+import re
+import oracledb
 
+from proyecto_final_nexus.Views.view_registro_afiliados import RegistroAfiliado
+
+host = "localhost"
+port = 1521
+sid = "xe"
+user = "LANTHA"
+password = "eldenring"
+dsn = f"{host}:{port}/{sid}"
+from proyecto_final_nexus.Views.view_afiliado import VentanaPrincipal
+from proyecto_final_nexus.model.Afiliado import afiliado
+from proyecto_final_nexus.model.Afiliado.afiliado import Sesion
 
 
 class LoginWindow(tk.Tk):
@@ -32,7 +43,7 @@ class LoginWindow(tk.Tk):
         self.password_entry = ttk.Entry(main_frame, show="*", font=("Arial", 12))
         self.login_button = ttk.Button(main_frame, text="Iniciar sesión", command=self.autenticar)
 
-
+        # Usar grid para todos los widgets
         self.username_label.grid(row=1, column=0, padx=10, pady=10, sticky="e")
         self.password_label.grid(row=2, column=0, padx=10, pady=10, sticky="e")
         self.username_entry.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
@@ -86,7 +97,6 @@ class LoginWindow(tk.Tk):
 
         except ValueError as ve:
             messagebox.showerror("Error de autenticación", str(ve))
-
 
 
 if __name__ == "__main__":

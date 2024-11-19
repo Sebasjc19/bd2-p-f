@@ -50,7 +50,7 @@ class VentanaVentas:
         self.tree = ttk.Treeview(self.frame_tabla, columns=("ID Factura", "Fecha", "Nombre Afiliados", "Total"),
                                  show="headings")
 
-        # Definir las columnas
+
         self.tree.heading("ID Factura", text="ID Factura")
         self.tree.heading("Fecha", text="Fecha")
         self.tree.heading("Nombre Afiliados", text="Nombre Afiliados")
