@@ -3,19 +3,17 @@ import oracledb
 host = "localhost"
 port = 1521
 sid = "xe"
-user = "nexus"
-password = "admin1234"
+user = "LANTHA"
+password = "eldenring"
 
 
 dsn = f"{host}:{port}/{sid}"
 
-oracledb.init_oracle_client()
+oracledb.init_oracle_client(lib_dir="C:/Users/migue/Desktop/instantclient_23_6")
 connection = oracledb.connect(user=user, password=password, dsn=dsn)
 cursor = connection.cursor()
 
-class producto:
-
-
+class productos:
     @staticmethod
     def buscarProducto(id_producto):
         try:
@@ -36,13 +34,10 @@ class producto:
             else:
                 print("No se encontró un registro con id_producto =", id_producto)
                 return None
+        except Exception as e:
+            print(f"Error en buscarProducto: {e}")
+        return None
 
-        finally:
-            # Cerrar recursos
-            if cursor:
-                cursor.close()
-            if connection:
-                connection.close()
 
     @staticmethod
     def obtenerProductos():
@@ -53,7 +48,6 @@ class producto:
                 """
             cursor.execute(sql)
 
-            # Obtener el resultado de la consulta
             registro = cursor.fetchall()
 
             if registro:
@@ -63,10 +57,7 @@ class producto:
                 print("No se encontró productos")
                 return None
 
-        finally:
-            # Cerrar recursos
-            if cursor:
-                cursor.close()
-            if connection:
-                connection.close()
+        except Exception as e:
+            print(f"Error en buscarProducto: {e}")
+        return None
 

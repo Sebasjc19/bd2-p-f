@@ -1,25 +1,24 @@
 import oracledb
-
+from tkinter import messagebox
 # Configura los parámetros de conexión
 host = "localhost"
 port = 1521
 sid = "xe"
-user = "nexus"
-password = "admin1234"
+user = "LANTHA"
+password = "eldenring"
 
-# Define el DSN
 dsn = f"{host}:{port}/{sid}"
 
-# se establece una conexión directa
-oracledb.init_oracle_client()
-# Conéctate a la base de datos
+
+oracledb.init_oracle_client(lib_dir="C:/Users/migue/Desktop/instantclient_23_6")
+
 connection = oracledb.connect(user=user, password=password, dsn=dsn)
 
-# Crea un cursor para ejecutar la consulta
 cursor = connection.cursor()
 
 
 class afiliado:
+
 
     @staticmethod
     def crearAfiliado(id_promotor, nombre, apellido, email, telefono):
@@ -107,23 +106,28 @@ class afiliado:
 
     @staticmethod
     def buscarAfiliado(id_afiliado):
-        sql = """
-            SELECT id_afiliado, id_rango, id_promotor, nombre, apellido, email, fecha_afiliacion, telefono, activo
-            FROM afiliado
-            WHERE id_afiliado = :1
-        """
-        valores = (id_afiliado,)
-        cursor.execute(sql, valores)
+        try:
+            sql = """
+                SELECT id_afiliado, id_rango, id_promotor, nombre, apellido, email, fecha_afiliacion, telefono, activo
+                FROM afiliado
+                WHERE id_afiliado = :id_afiliado
+            """
+            valores = (id_afiliado,)
 
-        # Obtener el resultado de la consulta
-        registro = cursor.fetchone()
+            cursor.execute(sql, valores)
+            registro = cursor.fetchone()
 
-        if registro:
-            print("Afiliado encontrado:", registro)
-            return registro
-        else:
-            print(f"No se encontró un afiliado con id_afiliado = {id_afiliado}")
+            if registro:
+                print("Afiliado encontrado:", registro)
+                return registro
+            else:
+                print(f"No se encontró un afiliado con id_afiliado = {id_afiliado}")
+                return None
+
+        except oracledb.DatabaseError as error:
+            print("Error al buscar afiliado:", error)
             return None
+
 
     @staticmethod
     def mostrarAfiliadosPromotor(id_promotor):
@@ -158,8 +162,31 @@ class afiliado:
             afiliados.append((row[0], row[1], row[6]))  # ID, Nombre y Rango
 
         return afiliados
+    @staticmethod
+    def obtener_nombre_rango(id_rango):
+        sql = """
+        SELECT nombre
+        FROM rango
+        WHERE id_rango = :1
+        """
+        cursor.execute(sql, (id_rango,))
+        resultado = cursor.fetchone()
 
-    # buscarAfiliado(4)
-    # crearAfiliado(1, 1, "Leonardo", "Valencia", "leonardo@gmail.com", 3234345654)
-    # mostrarAfiliados()
-    # mostrarAfiliadosPromotor(1)
+        if resultado:
+            return resultado[0]
+        else:
+            return "Rango no encontrado"
+
+class Sesion:
+    def __init__(self, id_afiliado, id_rango, id_promotor, nombre, apellido,
+                 email, fecha_afiliacion, telefono, activo):
+        self.id_afiliado = id_afiliado
+        self.id_rango = id_rango
+        self.id_promotor = id_promotor
+        self.nombre = nombre
+        self.apellido = apellido
+        self.email = email
+        self.fecha_afiliacion = fecha_afiliacion
+        self.telefono = telefono
+        self.activo = activo
+
